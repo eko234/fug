@@ -11,8 +11,8 @@ define-command mv -override -params 1..2 -file-completion -docstring %{
     target="$1"
     bang="$2"
 
-    [ -f "$target" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
-    [ -d "$target" ] && [ -f "$target/${kak_buffile##*/}" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+    [ -f "$target" ] && [ -z "$bang" ] && echo "echo $kak_opt_rugmsg" && exit 1
+    [ -d "$target" ] && [ -f "$target/${kak_buffile##*/}" ] && [ -z "$bang" ] && echo "echo $kak_opt_rugmsg" && exit 1
 
     if ! mv "$kak_buffile" "$target"
     then
@@ -70,7 +70,7 @@ define-command rename -params 1 -file-completion -docstring %{
     target="$dir/$1"
     bang="$2"
 
-    [ -f "$target" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+    [ -f "$target" ] && [ -z "$bang" ] && echo "echo $kak_opt_rugmsg" && exit 1
     [ -d "$target" ] && echo "echo this is a dir bro" && exit 1
 
     if ! mv "$kak_buffile" "$target"
@@ -93,8 +93,8 @@ define-command cp -params 1 -file-completion -docstring %{
     target="$1"
     bang="$2"
 
-    [ -f "$target" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
-    [ -d "$target" ] && [ -f "$target/${kak_buffile##*/}" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+    [ -f "$target" ] && [ -z "$bang" ] && echo "echo $kak_opt_rugmsg" && exit 1
+    [ -d "$target" ] && [ -f "$target/${kak_buffile##*/}" ] && [ -z "$bang" ] && echo "echo $kak_opt_rugmsg" && exit 1
 
     if ! cp "$kak_buffile" "$target"
     then
