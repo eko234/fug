@@ -1,4 +1,7 @@
-define-command mv -params 1 -file-completion -docstring %{
+declare-option str rug '~/.fug/'
+declare-option str rugmsg 'add bang(!) to force :p'
+
+define-command mv -override -params 1..2 -file-completion -docstring %{
   Move the current file and rename the buffer
 
   Usage: mv TARGET
@@ -6,6 +9,11 @@ define-command mv -params 1 -file-completion -docstring %{
   write
   evaluate-commands %sh{
     target="$1"
+    bang="$2"
+
+    [ -f "$target" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+    [ -d "$target" ] && [ -f "$target/${kak_buffile##*/}" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+
     if ! mv "$kak_buffile" "$target"
     then
       fail "Failed to move file (see *debug*)"
@@ -60,6 +68,11 @@ define-command rename -params 1 -file-completion -docstring %{
   evaluate-commands %sh{
     dir=$(dirname "$kak_buffile")
     target="$dir/$1"
+    bang="$2"
+
+    [ -f "$target" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+    [ -d "$target" ] && echo "echo this is a dir bro" && exit 1
+
     if ! mv "$kak_buffile" "$target"
     then
       fail "Failed to rename file (see *debug*)"
@@ -77,7 +90,13 @@ define-command cp -params 1 -file-completion -docstring %{
 } %{
   write
   evaluate-commands %sh{
-    if ! cp "$kak_buffile" "$1"
+    target="$1"
+    bang="$2"
+
+    [ -f "$target" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+    [ -d "$target" ] && [ -f "$target/${kak_buffile##*/}" ] && [ -z "$bang" ] && echo "$kak_opt_rugmsg" && exit 1
+
+    if ! cp "$kak_buffile" "$target"
     then
       fail "Failed to copy file (see *debug*)"
     fi
@@ -108,7 +127,7 @@ define-command chmod -params 1 -file-completion -docstring %{
   }
 }
 
-define-command rm -file-completion -docstring %{
+define-command rm -params 1 -file-completion -docstring %{
   Remove the current file and buffer
 } %{
   evaluate-commands %sh{
